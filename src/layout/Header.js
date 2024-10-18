@@ -1,64 +1,47 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "./eddysticker2.jpg";
+import { getCurrentUser, logoutUser } from "../services/UserServices";
+import "./Header.css";
 
 function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const user = getCurrentUser();
 
-  const handleLogout = () => {
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      console.log("Logout successful");
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
-    <header style={styles.header}>
-      <img src={logo} alt="Eddy's Late Night Eats Logo" style={styles.logo} />
-      <nav style={styles.nav}>
-        <Link to="/home" style={styles.link}>
+    <header className="header">
+      <div className="left-section">
+        <img src={logo} alt="Eddy's Late Night Eats Logo" className="logo" />
+        {location.pathname === "/home" && user && (
+          <span className="welcome-message">Welcome, {user.get("username")}!</span>
+        )}
+      </div>
+      <nav className="nav">
+        <Link to="/home" className="link">
           Home
         </Link>
-        <Link to="/order" style={styles.link}>
+        <Link to="/order" className="link">
           Submit Order
         </Link>
-        <button onClick={handleLogout} style={styles.logoutButton}>
-          Logout
-        </button>
+        {user && (
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
+        )}
       </nav>
     </header>
   );
 }
-
-const styles = {
-  header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "10px 20px",
-    backgroundColor: "navy",
-    color: "white",
-  },
-  logo: {
-    height: "80px", // Adjust the size to make it bigger
-    width: "80px",
-    borderRadius: "50%", // Make the logo circular
-    objectFit: "cover", // Crop the image to fit within the circular frame
-  },
-  nav: {
-    display: "flex",
-    alignItems: "center",
-    gap: "15px",
-  },
-  link: {
-    color: "white",
-    textDecoration: "none",
-    fontWeight: "bold",
-  },
-  logoutButton: {
-    color: "white",
-    backgroundColor: "transparent",
-    border: "none",
-    cursor: "pointer",
-    fontWeight: "bold",
-  },
-};
 
 export default Header;
