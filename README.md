@@ -1,3 +1,8 @@
+# Feature 4 
+# Partner Names:
+- Alex Castillo
+- EG Gonzalez 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

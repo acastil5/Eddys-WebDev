@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAllMenuItems } from "../../services/Menu.js";
+import { getAllMenuItems } from "../../services/Menu";
+import { saveOrder } from "../../services/OrderServices"; 
+import "./OrderPage.css";
 
 function OrderPage() {
   const [menuItems, setMenuItems] = useState([]);
   const [cart, setCart] = useState({});
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch menu data from JSON file and set state
@@ -38,17 +38,30 @@ function OrderPage() {
     });
   };
 
-  const handleSubmitOrder = () => {
+  const handleSubmitOrder = async () => {
     if (window.confirm("Are you sure you want to submit the order?")) {
-      console.log("Order submitted:", cart);
-      // Navigate to the Home page after submission
-      navigate("/home");
+      try {
+        const orderItems = Object.values(cart).map((item) => ({
+          itemId: item.id,
+          itemName: item.name,
+          quantity: item.count,
+          price: item.price,
+        }));
+        const totalAmount = orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+        await saveOrder(orderItems, totalAmount); // Call the service to save the order
+        alert("Order submitted successfully!");
+        setCart({});
+      } catch (error) {
+        console.error("Order submission failed:", error);
+        alert("Failed to submit order. Please try again.");
+      }
     }
   };
 
   return (
-    <div className="order-page" style={styles.container}>
-      <div style={styles.menu}>
+    <div className="order-page">
+      <div className="menu">
         <h2>Menu</h2>
         {["Entree", "Drink"].map((category) => (
           <div key={category}>
@@ -56,33 +69,15 @@ function OrderPage() {
             {menuItems
               .filter((item) => item.category === category)
               .map((item) => (
-                <div key={item.id} style={styles.menuItem}>
+                <div key={item.id} className="menu-item">
                   <span>
                     {item.name} - ${item.price.toFixed(2)}
                   </span>
                   <div>
-                    <button
-                      onClick={() => handleAddToCart(item)}
-                      style={styles.button}
-                      onMouseEnter={(e) =>
-                        (e.target.style.backgroundColor = "#ADD8E6")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.target.style.backgroundColor = "transparent")
-                      }
-                    >
+                    <button onClick={() => handleAddToCart(item)} className="button">
                       +
                     </button>
-                    <button
-                      onClick={() => handleRemoveFromCart(item)}
-                      style={styles.button}
-                      onMouseEnter={(e) =>
-                        (e.target.style.backgroundColor = "#FFB6C1")
-                      }
-                      onMouseLeave={(e) =>
-                        (e.target.style.backgroundColor = "transparent")
-                      }
-                    >
+                    <button onClick={() => handleRemoveFromCart(item)} className="button">
                       -
                     </button>
                   </div>
@@ -91,22 +86,21 @@ function OrderPage() {
           </div>
         ))}
       </div>
-      <div style={styles.cart}>
+      <div className="cart">
         <h2>Cart</h2>
         {Object.values(cart).length === 0 ? (
           <p>Your cart is empty</p>
         ) : (
           Object.values(cart).map((item) => (
-            <div key={item.id} style={styles.cartItem}>
+            <div key={item.id} className="cart-item">
               <span>
-                {item.name} (x{item.count}) - $
-                {(item.price * item.count).toFixed(2)}
+                {item.name} (x{item.count}) - ${(item.price * item.count).toFixed(2)}
               </span>
             </div>
           ))
         )}
         {Object.values(cart).length > 0 && (
-          <button style={styles.submitButton} onClick={handleSubmitOrder}>
+          <button onClick={handleSubmitOrder} className="submit-button">
             Submit Order
           </button>
         )}
@@ -114,51 +108,5 @@ function OrderPage() {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "20px",
-  },
-  menu: {
-    width: "60%",
-    padding: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "10px",
-  },
-  menuItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    margin: "10px 0",
-    padding: "10px",
-    borderBottom: "1px solid #ccc",
-  },
-  cart: {
-    width: "30%",
-    padding: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "10px",
-  },
-  cartItem: {
-    margin: "10px 0",
-  },
-  button: {
-    margin: "0 5px",
-    padding: "5px 10px",
-    cursor: "pointer",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  submitButton: {
-    marginTop: "20px",
-    padding: "10px 20px",
-    backgroundColor: "navy",
-    color: "white",
-    cursor: "pointer",
-    border: "none",
-    borderRadius: "5px",
-  },
-};
 
 export default OrderPage;
