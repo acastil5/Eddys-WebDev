@@ -13,9 +13,9 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await loginUser(username, password);
-      console.log("Login successful:", user.get("username"));
-      navigate("/home");
+      await loginUser(username, password);
+      console.log("Login successful");
+      navigate("/home"); // Redirect to Home page after successful login
     } catch (error) {
       console.error("Login failed:", error);
       setError("Invalid username/email or password");
