@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.0] - 2024-11-08
+### Added
+- `AuthService.js` to handle route protection and user authentication status checks.
+- Added requireAuth as wrapper for protected routes. Ensuring only authenticated users can access.
+- Added requireNoAuth as wrapper for authentication routes (e.g., login, signup), redirecting users to the home page if already logged in.
+- route protection through implementing protected routes in App.j
+
+  
+### Changed
+- Updated `Login.js` and `SignUp.js` components to redirect authenticated users to /home after a successful login or sign-up.
+- Refactored `App.js` to use requireAuth and requireNoAuth from `AuthService.js` for handling protected and unprotected routes respectively.
+
+### Fixed
+- Added logic to handle users manually typing URLs for protected routes, ensuring they are redirected to the login page if not authenticated.
+- Enhanced logout functionality in `Header.js` to redirect users to the login page on successful logout, improving the user experience.
+
+  
 ## [0.2.0] - 2024-10-18
 ### Added
 - Implemented login, signup, and order functionality with Parse database.
