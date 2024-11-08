@@ -14,6 +14,7 @@ import OrderPage from "./features/order/OrderPage";
 import Header from "./layout/Header";
 import LoginHeader from "./layout/LoginHeader";
 import Footer from "./layout/Footer";
+import { requireAuth, requireNoAuth } from "./services/AuthService";
 import "./App.css";
 
 // Initialize Parse (Back4App)
@@ -40,10 +41,13 @@ function AppContent() {
       )}
       <div className="content">
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/order" element={<OrderPage />} />
+          {/* Unprotected routes */}
+          <Route path="/" element={requireNoAuth(Login)} />
+          <Route path="/signup" element={requireNoAuth(SignUp)} />
+          
+          {/* Protected routes */}
+          <Route path="/home" element={requireAuth(Home)} />
+          <Route path="/order" element={requireAuth(OrderPage)} />
         </Routes>
       </div>
       <Footer />
