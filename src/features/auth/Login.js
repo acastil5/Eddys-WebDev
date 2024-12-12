@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/UserServices";
 import { Link } from "react-router-dom";
-import "./Login.css"; 
+import "./Login.css";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -13,9 +13,16 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await loginUser(username, password);
-      console.log("Login successful");
-      navigate("/home"); // Redirect to Home page after successful login
+      const user = await loginUser(username, password);
+      console.log("Login successful:", user);
+
+      if (user.get("username") === "staff24") {
+        // Redirect staff user to the staff page
+        navigate("/staff");
+      } else {
+        // Redirect regular users to the home page
+        navigate("/home");
+      }
     } catch (error) {
       console.error("Login failed:", error);
       setError("Invalid username/email or password");
@@ -50,7 +57,9 @@ function Login() {
             Login
           </button>
         </form>
-        <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+        <p>
+          Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
       </div>
     </div>
   );

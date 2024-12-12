@@ -1,0 +1,142 @@
+.staff-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f4f6f8;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.orders-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.orders-section {
+  flex: 1;
+  min-width: 320px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+}
+
+.order-card {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.order-card p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.order-card strong {
+  color: #003366;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.accept-button,
+.deny-button,
+.complete-button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  flex: 1; /* Make buttons equal width */
+}
+
+.accept-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.accept-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.deny-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.deny-button:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
+
+.complete-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.complete-button:hover {
+  background-color: #1e88e5;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .orders-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .orders-section {
+    width: 100%;
+  }
+
+  .order-card {
+    padding: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .accept-button,
+  .deny-button,
+  .complete-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}

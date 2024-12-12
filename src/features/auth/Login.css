@@ -63,3 +63,8 @@
     background-color: #004080;
   }
   
+  header h1 {
+    color: white !important; /* Force the text color to white */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Optional: Add a subtle shadow for readability */
+  }
+  

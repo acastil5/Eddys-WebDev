@@ -1,18 +1,36 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { getAllMenuItems } from "../../services/Menu";
-import { saveOrder } from "../../services/OrderServices"; 
+import { saveOrder } from "../../services/OrderServices";
 import "./OrderPage.css";
 
 function OrderPage() {
   const [menuItems, setMenuItems] = useState([]);
   const [cart, setCart] = useState({});
+  const location = useLocation();
 
   useEffect(() => {
     // Fetch menu data from JSON file and set state
     getAllMenuItems().then((items) => {
       setMenuItems(items);
     });
-  }, []);
+
+    // Populate cart if there's a previous order
+    if (location.state?.previousOrder) {
+      const previousOrder = location.state.previousOrder;
+
+      const prefilledCart = previousOrder.reduce((acc, item) => {
+        acc[item.itemId] = {
+          id: item.itemId, // Set the item's ID
+          name: item.itemName, // Correctly set the itemName
+          price: item.price, // Ensure the price is carried over
+          count: item.quantity, // Set the quantity as the count
+        };
+        return acc;
+      }, {});
+      setCart(prefilledCart);
+    }
+  }, [location.state]);
 
   const handleAddToCart = (item) => {
     setCart((prevCart) => {
@@ -59,6 +77,13 @@ function OrderPage() {
     }
   };
 
+  const calculateTotal = () => {
+    return Object.values(cart).reduce(
+      (total, item) => total + item.price * item.count,
+      0
+    );
+  };
+
   return (
     <div className="order-page">
       <div className="menu">
@@ -91,13 +116,18 @@ function OrderPage() {
         {Object.values(cart).length === 0 ? (
           <p>Your cart is empty</p>
         ) : (
-          Object.values(cart).map((item) => (
-            <div key={item.id} className="cart-item">
-              <span>
-                {item.name} (x{item.count}) - ${(item.price * item.count).toFixed(2)}
-              </span>
+          <>
+            {Object.values(cart).map((item) => (
+              <div key={item.id} className="cart-item">
+                <span>
+                  {item.name} (x{item.count}) - ${(item.price * item.count).toFixed(2)}
+                </span>
+              </div>
+            ))}
+            <div className="cart-total">
+              <strong>Total:</strong> ${calculateTotal().toFixed(2)}
             </div>
-          ))
+          </>
         )}
         {Object.values(cart).length > 0 && (
           <button onClick={handleSubmitOrder} className="submit-button">

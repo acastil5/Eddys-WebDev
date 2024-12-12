@@ -35,3 +35,9 @@ export const logoutUser = async () => {
 export const getCurrentUser = () => {
   return Parse.User.current();
 };
+
+// Function to check if the logged-in user is staff
+export const isStaffUser = () => {
+  const currentUser = Parse.User.current();
+  return currentUser && currentUser.get("username") === "staff24";
+};

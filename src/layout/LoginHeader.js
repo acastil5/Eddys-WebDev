@@ -1,22 +1,12 @@
 import React from "react";
+import "./LoginHeader.css"; 
 
 function LoginHeader() {
   return (
-    <header style={styles.header}>
+    <header className="login-header">
       <h1>Eddy's Late Night Eats</h1>
     </header>
   );
 }
-
-const styles = {
-  header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "10px 20px",
-    backgroundColor: "navy",
-    color: "white",
-  },
-};
 
 export default LoginHeader;

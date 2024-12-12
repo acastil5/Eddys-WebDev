@@ -22,22 +22,21 @@ function Header() {
   return (
     <header className="header">
       <div className="left-section">
-        <img src={logo} alt="Eddy's Late Night Eats Logo" className="logo" />
+        <Link to="/home">
+          <img src={logo} alt="Eddy's Late Night Eats Logo" className="logo" />
+        </Link>
         {location.pathname === "/home" && user && (
           <span className="welcome-message">Welcome, {user.get("username")}!</span>
         )}
       </div>
       <nav className="nav">
-        <Link to="/home" className="link">
-          Home
-        </Link>
-        <Link to="/order" className="link">
-          Submit Order
-        </Link>
+        <Link to="/home" className="link">Home</Link>
+        <Link to="/order" className="link">Submit Order</Link>
         {user && (
-          <button onClick={handleLogout} className="logout-button">
-            Logout
-          </button>
+          <>
+            <Link to="/history" className="link">Order History</Link>
+          <button onClick={handleLogout} className="logout-button">Logout</button>
+          </>
         )}
       </nav>
     </header>
