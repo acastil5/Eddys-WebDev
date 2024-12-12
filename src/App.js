@@ -42,12 +42,12 @@ function AppContent() {
       <div className="content">
         <Routes>
           {/* Unprotected routes */}
-          <Route path="/" element={requireNoAuth(Login)} />
-          <Route path="/signup" element={requireNoAuth(SignUp)} />
-          
+          <Route path="/" element={<requireNoAuth><Login /></requireNoAuth>} />
+          <Route path="/signup" element={<requireNoAuth><SignUp /></requireNoAuth>} />
+
           {/* Protected routes */}
-          <Route path="/home" element={requireAuth(Home)} />
-          <Route path="/order" element={requireAuth(OrderPage)} />
+          <Route path="/home" element={<requireAuth><Home /></requireAuth>} />
+          <Route path="/order" element={<requireAuth><OrderPage /></requireAuth>} />
         </Routes>
       </div>
       <Footer />
